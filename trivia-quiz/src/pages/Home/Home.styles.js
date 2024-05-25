@@ -42,9 +42,17 @@ export const ErrorText = styled.div`
 `;
 
 export const LevelsContainer = styled.div`
-display: flex;
-justify-content: space-between
-`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const LevelButton = styled(Button)`
+  ${({ isselected }) => isselected === 'true' && `
+    border: 2px solid #000;
+    transform: scale(1.1);
+  `}
+`;
+
 export const PlayButton = styled(Button)`
   margin-top: 20px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
