@@ -36,7 +36,6 @@ const Question = () => {
     level,
     resetCategory,
     currentCategoryIndex,
-    incrementCategoryIndex,
   } = useQuizStore();
 
   const { data, error, isLoading, refetch } = useFetchQuestions(
@@ -52,10 +51,10 @@ const Question = () => {
   }, [category, level]);
 
   useEffect(() => {
-    if (currentQuestionIndex >= QUESTIONS_AMOUNT - 1) {
+    if (currentQuestionIndex >= QUESTIONS_AMOUNT) {
       resetCategory();
       handleTimeUp();
-    }
+    };
   }, [currentQuestionIndex, currentCategoryIndex]);
 
   const handleNextQuestion = (isSkipped = false) => {
@@ -70,12 +69,14 @@ const Question = () => {
   };
 
   const handleTimeUp = () => {
-    resetCategory();
-    if (currentCategoryIndex >= CATEGORIES_LENGTH - 1) {
+    if (currentCategoryIndex >= CATEGORIES_LENGTH) {
       navigate("/score");
     } else {
-      incrementCategoryIndex();
-      navigate("/categories");
+      navigate("/categories", {
+        state: {
+          categoryTime: LEVELS_TIME[level] - time + 1,
+        },
+      });
     }
   };
 

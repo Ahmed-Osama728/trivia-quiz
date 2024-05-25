@@ -15,6 +15,7 @@ export const useQuizStore = create(
       playedCategories: [],
       currentCategoryIndex: 0,
       error: '',
+      categoriesTimes: [],
 
       setPlayerName: (name) => set({ playerName: name }),
       setLevel: (selectedLevel) => set({ level: selectedLevel }),
@@ -27,6 +28,7 @@ export const useQuizStore = create(
       addPlayedCategory: (category) => set((state) => ({ playedCategories: [...state.playedCategories, category] })),
       incrementCategoryIndex: () => set((state) => ({ currentCategoryIndex: state.currentCategoryIndex + 1 })),
       setError: (error) => set({ error }),
+      addCategoryTime: (time) => set((state) => ({ categoriesTimes: [...state.categoriesTimes, time] })),
 
       resetGame: () => set({ 
         score: 0, 
@@ -39,7 +41,8 @@ export const useQuizStore = create(
         playedCategories: [],
         currentCategoryIndex: 0,
         error: '',
-        level: ''
+        level: '',
+        categoriesTimes: [],
       }),
 
       resetCategory: () => set({

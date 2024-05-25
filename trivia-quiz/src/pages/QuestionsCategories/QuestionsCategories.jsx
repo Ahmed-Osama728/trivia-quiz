@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Text } from '@chakra-ui/react';
 import {
   StyledContainer,
@@ -21,15 +21,21 @@ const QuestionsCategories = () => {
     questions,
     setQuestions,
     playedCategories,
-    currentCategoryIndex,
     addPlayedCategory,
-    incrementCategoryIndex
+    resetCategory,
+    incrementCategoryIndex,
+    addCategoryTime
   } = useQuizStore();
+  const location = useLocation();
 
   useEffect(() => {
     if(questions?.length > 0) {
       setQuestions([]);
-    }
+    };
+    incrementCategoryIndex();
+    resetCategory();
+    const categoryTime = location.state?.categoryTime || 0;
+    addCategoryTime(categoryTime);
   },[]);
 
   const handleCategoryClick = (category) => {
