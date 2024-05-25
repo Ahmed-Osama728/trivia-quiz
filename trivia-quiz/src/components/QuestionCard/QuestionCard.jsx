@@ -31,6 +31,7 @@ const QuestionCard = ({ question, selectedAnswer, setSelectedAnswer }) => {
             transition="background 0.3s ease"
             _hover={{ background: "blue.600", color: "white" }}
             _active={{ background: "blue.700" }}
+            colorScheme={selectedAnswer === answer ? "blue" : "gray"}
           >
             {answer}
           </Button>

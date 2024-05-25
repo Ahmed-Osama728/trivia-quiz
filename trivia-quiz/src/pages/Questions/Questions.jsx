@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, Spinner } from "@chakra-ui/react";
 import useFetchQuestions from "../../hooks/useFetchQuestions";
 import {
   StyledContainer,
   StyledHeader,
-  StyledButton,
 } from "./Quesitons.styles";
 import QuestionCard from "../../components/QuestionCard/QuestionCard";
 import Timer from "../../components/Timer";
@@ -20,6 +19,7 @@ const LEVELS_TIME = {
 
 const CATEGORIES_LENGTH = 3;
 const QUESTIONS_AMOUNT = 10;
+export const TOTAL_QUESIOTNS_LENGTH = CATEGORIES_LENGTH * QUESTIONS_AMOUNT; 
 
 const Question = () => {
   const { state } = useLocation();
@@ -36,6 +36,7 @@ const Question = () => {
     level,
     resetCategory,
     currentCategoryIndex,
+    incrementWrongAnswers,
   } = useQuizStore();
 
   const { data, error, isLoading, refetch } = useFetchQuestions(
@@ -54,27 +55,32 @@ const Question = () => {
     if (currentQuestionIndex >= QUESTIONS_AMOUNT) {
       resetCategory();
       handleTimeUp();
-    };
+    }
   }, [currentQuestionIndex, currentCategoryIndex]);
 
   const handleNextQuestion = (isSkipped = false) => {
-    if (
-      !isSkipped &&
+    if (!isSkipped) {
       selectedAnswer === questions[currentQuestionIndex].correct_answer
-    ) {
-      incrementScore();
+        ? incrementScore()
+        : incrementWrongAnswers();
     }
     setSelectedAnswer("");
     nextQuestion();
   };
 
   const handleTimeUp = () => {
+    const categoryTime = LEVELS_TIME[level] - time + 1;
+
     if (currentCategoryIndex >= CATEGORIES_LENGTH) {
-      navigate("/score");
+      navigate("/score", {
+        state: {
+          categoryTime: categoryTime,
+        },
+      });
     } else {
       navigate("/categories", {
         state: {
-          categoryTime: LEVELS_TIME[level] - time + 1,
+          categoryTime: categoryTime,
         },
       });
     }
@@ -82,7 +88,11 @@ const Question = () => {
 
   const time = useCountdownTimer(LEVELS_TIME[level], handleTimeUp);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return (
+    <StyledContainer>
+      <Spinner size="xl" />
+    </StyledContainer>
+  );;
   if (error) return <div>Error: {error.message}</div>;
 
   return (

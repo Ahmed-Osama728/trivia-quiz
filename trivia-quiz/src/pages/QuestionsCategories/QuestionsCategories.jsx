@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Spinner, Text } from '@chakra-ui/react';
 import {
   StyledContainer,
   StyledHeader,
@@ -53,7 +53,11 @@ const QuestionsCategories = () => {
   };
 
   if (isLoadingCategories) {
-    return <div>Loading...</div>;
+    return (
+      <StyledContainer>
+        <Spinner size="xl" />
+      </StyledContainer>
+    );
   }
 
   if (categoriesError ) {
