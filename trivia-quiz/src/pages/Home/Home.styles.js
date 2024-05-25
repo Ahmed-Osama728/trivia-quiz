@@ -6,7 +6,7 @@ export const StyledContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 500px;
+  height: 60%;
   width: 400px;
   margin: auto;
   border-radius: 20px;
@@ -43,7 +43,7 @@ export const ErrorText = styled.div`
 
 export const LevelsContainer = styled.div`
 display: flex;
-justify: space-between
+justify-content: space-between
 `
 export const PlayButton = styled(Button)`
   margin-top: 20px;
