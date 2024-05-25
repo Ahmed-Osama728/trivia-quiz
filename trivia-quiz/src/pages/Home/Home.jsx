@@ -11,32 +11,20 @@ import {
   LevelsContainer
 } from './Home.styles';
 import { useQuizStore } from '../../store/useQuizStore';
+import useSessionToken from '../../hooks/useSessionToken';
 
+export const TOKEN_REFETCH_CODES = [3, 4]
 const Home = () => {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { level, setLevel } = useQuizStore();
+  const { level, setLevel, setPlayerName, resetGame } = useQuizStore();
+  const { token, error: tokenError, isLoading: isLoadingToken} = useSessionToken();
 
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-    setError('');
-  };
-
-  const handlePlay = () => {
-    if (name.trim() === '') {
-      setError('Please enter your name');
-    } else if (!level) {
-      setError('Please select a level');
-    } else {
-      navigate('/question-category');
-    }
-  };
-
-  const handleLevelSelect = (selectedLevel) => {
-    setLevel(selectedLevel);
-  };
-
+  useEffect(() => {
+    resetGame();
+  },[])
+  
   useEffect(() => {
     const handleKeyDown = (event) => {
       switch (event.key) {
@@ -74,8 +62,39 @@ const Home = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [handleLevelSelect]);
+  }, []);
 
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+    setError('');
+  };
+
+  const handlePlay = () => {
+    if (name.trim() === '') {
+      setError('Please enter your name');
+    } else if (!level) {
+      setError('Please select a level');
+    } else {
+      setPlayerName(name);
+      navigate('/categories');
+    }
+  };
+
+  const handleLevelSelect = (selectedLevel) => {
+    setLevel(selectedLevel);
+  };
+
+  if (isLoadingToken) {
+    return <div>Loading...</div>;
+  }
+
+  if (tokenError) {
+    return (
+      <div>
+        Error loading data.
+      </div>
+    );
+  }
   return (
     <StyledContainer>
       <StyledHeader>Trivia Quiz</StyledHeader>
